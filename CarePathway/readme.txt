@@ -15,7 +15,7 @@ Please download the tomcatPluginV331.zip
 Then move the jar to the eclipse/plugins
 
 4 Tomcat
-http://tomcat.apache.org/download-80.cgi
+http://tomcat.apache.org/download-70.cgi
 move to bin dir and commond sudo chmod +x *.sh
 
 5 Anglarjs
