@@ -21,75 +21,92 @@
 	cursor: default;
 } */
 .button {
-	padding: .5em;
-	border: 1px solid #ccc;
+	background: -moz-linear-gradient(top,#0099CC 0%,#006699);
+    background: -webkit-gradient(linear, left top, left bottom, from(#66CCCC), to(#00CCCC));
+    border: 1px solid #000;
+    color: #000;
+    padding: 3px 0;
 }
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>CarePathway Creator</title>
 <script type="text/javascript" src="lib/angular.min.js"></script>
 </head>
-<body>
+<body bgcolor="#EEFFFF">
 	<table>
 		<tr>
-			<td>CarePathway Creator</td>
+			<td><span style="font-size:x-large">CarePathway Creator</span></td>
 		</tr>
 	</table>
-	<div ng-app="myApp" ng-controller="myCtrl">
-		<!-- <tr>
-			<td>
-				<p>
-					Test: <input type="text" ng-model="textName">
-				</p>
-				<p>Hello:{{textName}}</p>
-			</td>
-		</tr> -->
-		<table border="2" width="900" height="400">
+	<div ng-app="myApp" ng-controller="myCtrl" style="overflow-x: auto; overflow-y: auto;">
+		<table border="1" width="1100" height="500">
 			<tr>
-				<!-- ------------------------------left part Start------------------------------ -->
+				<!-- ------------------------------ left part Start ------------------------------ -->
 				<td>
-					<table border="0" width="450" height="400">
-						<tr>
-							<td><lable>Conditoins:</lable></td>
+					<table border="0" width="550" height="500" bgcolor="white">
+						<tr height="20">
+							<td colspan="3">CONDITIONS:</td>
 						</tr>
-						<tr colspan="2">
-							<td valign="middle">
-								<input type="text" name="searchArea" size="40"></input>
+						<tr height="20">
+							<td colspan="3" valign="middle">
+								<input type="text" name="searchArea" size="50"></input>
 								<button onclick="alert('NLP API');">
 									<img width="15" height="15" src="search.jpg" border="0" />
 								</button>
 								<!-- <span ng-right-click="decrement()">{{value}}</span> -->
-								<!-- <span context-menu="myContext">Add Q</span></td> -->
-						<tr>
-							<td>
+								<!-- <span context-menu="myContext">Add Q</span> -->
 								<addbuttonsbutton></addbuttonsbutton>
+							</td>
+						</tr>
+						<tr height="200">
+							<td colspan="3">
 								<div id="add-question"></div>
 								<div id="add-options"></div>
 							</td>
 						</tr>
-						<tr align="right">
-							<td >
+						<tr align="right" height="20">
+							<td colspan="3">
 								 <span ng-mouseover="mouseover()" ng-mouseleave="mouseleave()" 
-								 	ng-style="myStyle" ng-class="'button'">Reset</span>
+								 	ng-style="myStyle" ng-class="'button'" ng-click="reset()">Reset</span>
 								 <span ng-mouseover="mouseover2()" ng-mouseleave="mouseleave2()" 
 								 	ng-style="myStyle2" ng-class="'button'">Submit</span>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<table border="1" width="450" height="145">
+								<hr>
+							</td>
+						</tr>
+						<tr height="160">
+							<td>
+								<table border="0" width="550" height="160">
+									<tr height="20">
+										<td colspan="3">EXIT CONDITIONS:</td>
+									</tr>
+									<tr height="140">
+										<td colspan="3">
+										</td>
+									</tr>
 								</table>
+							</td>
+						</tr>
+						<tr align="right" valign="middle" height="20">
+							<td>
+								 <span ng-mouseover="mouseover3()" ng-mouseleave="mouseleave3()" 
+								 	ng-style="myStyle3" ng-class="'button'">Reset</span>
+								 <span ng-mouseover="mouseover4()" ng-mouseleave="mouseleave4()" 
+								 	ng-style="myStyle4" ng-class="'button'">Submit</span>
 							</td>
 						</tr>
 					</table>
 				</td>
-				<!-- ------------------------------left part end------------------------------ -->
-				<!-- ------------------------------left part start---------------------------- -->
+				<!-- ------------------------------ left part end ------------------------------ -->
+				<!-- ------------------------------ left part start ---------------------------- -->
 				<td>
-					<table border="1" width="450" height="400">
+					<table border="1" width="550" height="500" bgcolor="white">
 					</table>
 				</td>
-				<!-- ------------------------------right part end------------------------------ -->
+				<!-- ------------------------------ right part end ------------------------------ -->
 			</tr>
 		</table>
 	</div>
@@ -118,22 +135,51 @@
 					fontWeight : 'normal'
 				}
 			}
+			$scope.mouseover3 = function() {
+				$scope.myStyle3 = {
+					fontWeight : 'bold'
+				};
+			}
+			$scope.mouseleave3 = function() {
+				$scope.myStyle3 = {
+					fontWeight : 'normal'
+				}
+			}
+			$scope.mouseover4 = function() {
+				$scope.myStyle4 = {
+					fontWeight : 'bold'
+				};
+			}
+			$scope.mouseleave4 = function() {
+				$scope.myStyle4 = {
+					fontWeight : 'normal'
+				}
+			}
 			/*Mouse Moveover end*/
 			
 			/*Options start*/
 		   	$scope.items = [{ id: 1, name: 'Add Radio Button' },
 		  			     	{ id: 2, name: 'Add Input Area' },];
 			/*Options end*/
+			
+			/*Dynamically add questions start*/
+			$scope.count = 0;
+			$scope.countRadioB = 0;
+			$scope.countText = 0;
+			/*Dynamically add questions end*/
+			
+			/*Reset start*/
+			$scope.reset = function() {
+				alert('Need to be improved.');
+			}
+			/*Reset end*/
 		} ]);
 
 		/*Dynamically add questions start*/
-		function myCtrl($scope) {
-			$scope.count = 0;
-		}
 		app.directive("addbuttonsbutton", function() {
 			return {
 				restrict : "E",
-				template : "<button addbuttons>Click to add questions</button>"
+				template : "<button addbuttons class ='button'>Click to add questions</button>"
 			}
 		});
 		app.directive("addbuttons",function($compile) {
@@ -141,8 +187,7 @@
 				element.bind("click", function() {
 					scope.count++;
 					angular.element(document.getElementById('add-question')).append($compile(
-						"<div><tr colspan='3'><td>Question:</td><td>&nbsp;&nbsp;</td><td><select ng-model='selectedItem' ng-options='item as item.name for item in items'></select></td><td><button add>ADD</button></td><td><input type='text' size='50'></td></tr></div>")
-																			(scope));
+						"<div><tr colspan='3'><td>Question"+scope.count+":</td><td>&nbsp;&nbsp;</td><td><select ng-model='selectedItem' ng-options='item as item.name for item in items'></select></td><td><button add class ='button'>ADD</button></td><td><input type='text' size='50'></td></tr></div>")(scope));
 				});
 			};
 		});
@@ -151,10 +196,10 @@
 				element.bind("click", function() {
 					if (scope.selectedItem.id == '1') {
 						angular.element(document.getElementById('add-options')).append($compile(
-						"<div><p><input type='radio' name='q1' value='1'><input type='text' size='5'></p></div>")(scope));
-					} else {
+						"<div><input type='radio' name="+scope.countRadioB+" value='1'><input type='text' size='5'></div>")(scope));
+					} else if (scope.selectedItem.id == '2') {
 						angular.element(document.getElementById('add-options')).append($compile(
-						"<div><p><input type='text' size='25'><input type='checkbox' value=''></p></div>")(scope));
+						"<div><input type='text' size='25'><input type='checkbox' value="+scope.countText+"></div>")(scope));
 					}
 				});
 			};
@@ -162,12 +207,7 @@
 		/*Dynamically add questions end*/
 
 		/*-----------------------------backup souce-------------------------------------------*/
-		/* app.controller('myCtrl', function($scope) {
-			$scope.textName = "John";
-		    $scope.value = 10;
-		}); */
-
-		/* Right click start*/
+		/* Mouse right click start*/
 		/* app.controller('myCtrl', function($scope) {
 		    $scope.value = 10;
 		    $scope.decrement = function() {
@@ -186,8 +226,8 @@
 		        });
 		    };
 		}); */
-		/* Right click end*/
-		/*Mouse menu start*/
+		/* Mouse right click end*/
+		/*Mouse right click show menu start*/
 		/* app.controller( 'myCtrl', [ '$scope', function($scope) {
 			$scope.myContext = "<ul id='contextmenu-node'><li class='contextmenu-item' ng-click='clickedItem1()'> Add Q with Radio button </li><li class='contextmenu-item' ng-click='clickedItem2()'> Add Q with input</li></ul>";
 			$scope.clickedItem1 = function() {
@@ -217,7 +257,7 @@
 			};
 			return contextMenu;
 		}); */
-		/*Mouse menu end*/
+		/*Mouse right click show menu end*/
 	/***************************************** Yuzhu Add End *******************************/
 	</script>
 </body>
