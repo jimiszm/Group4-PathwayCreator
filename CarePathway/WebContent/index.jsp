@@ -61,7 +61,6 @@
 						<tr height="200">
 							<td colspan="3">
 								<div id="add-question"></div>
-								<div id="add-options"></div>
 							</td>
 						</tr>
 						<tr align="right" height="20">
@@ -69,7 +68,7 @@
 								 <span ng-mouseover="mouseover()" ng-mouseleave="mouseleave()" 
 								 	ng-style="myStyle" ng-class="'button'" ng-click="reset()">Reset</span>
 								 <span ng-mouseover="mouseover2()" ng-mouseleave="mouseleave2()" 
-								 	ng-style="myStyle2" ng-class="'button'">Submit</span>
+								 	ng-style="myStyle2" ng-class="'button'" type="submit" value="submit" ng-click="submit()">Submit</span>
 							</td>
 						</tr>
 						<tr>
@@ -83,8 +82,13 @@
 									<tr height="20">
 										<td colspan="3">EXIT CONDITIONS:</td>
 									</tr>
-									<tr height="140">
+									<tr height="20" align="left">
+										<td>* NEXT STEP NAME</td>
+										<td colspan="2"><input type="text" name="nextStep" size="30"></input></td>
+									</tr>
+									<tr height="120">
 										<td colspan="3">
+										{{checked}}
 										</td>
 									</tr>
 								</table>
@@ -164,6 +168,7 @@
 			
 			/*Dynamically add questions start*/
 			$scope.count = 0;
+			$scope.countTemp = "";
 			$scope.countRadioB = 0;
 			$scope.countText = 0;
 			/*Dynamically add questions end*/
@@ -173,6 +178,14 @@
 				alert('Need to be improved.');
 			}
 			/*Reset end*/
+			
+			/*Submit start*/
+			$scope.submit = function() {
+				alert('aaa');
+				$scope.showing = {};
+				$scope.showing[id] = true;
+			}
+			/*Submit end*/
 		} ]);
 
 		/*Dynamically add questions start*/
@@ -186,20 +199,22 @@
 			return function(scope, element, attrs) {
 				element.bind("click", function() {
 					scope.count++;
+					/* scope.countTemp='selectedItem'+scope.count; */
 					angular.element(document.getElementById('add-question')).append($compile(
-						"<div><tr colspan='3'><td>Question"+scope.count+":</td><td>&nbsp;&nbsp;</td><td><select ng-model='selectedItem' ng-options='item as item.name for item in items'></select></td><td><button add class ='button'>ADD</button></td><td><input type='text' size='50'></td></tr></div>")(scope));
+						"<div><tr colspan='3'><td>Question"+scope.count+":</td><td>&nbsp;&nbsp;</td><td><select ng-model='selectedItem' ng-options='item as item.name for item in items'></select></td><td><button add class ='button'>ADD</button></td><td><input type='text' size='50'></td></tr>")(scope));
 				});
 			};
 		});
 		app.directive("add", function($compile) {
 			return function(scope, element, attrs) {
 				element.bind("click", function() {
+					/* alert(scope.countTemp.id); */
 					if (scope.selectedItem.id == '1') {
-						angular.element(document.getElementById('add-options')).append($compile(
-						"<div><input type='radio' name="+scope.countRadioB+" value='1'><input type='text' size='5'></div>")(scope));
+						angular.element(document.getElementById('add-question')).append($compile(
+						"<tr><td><input type='radio' name="+scope.countRadioB+" value='1'><input ng-model='radioed' type='text' size='5'></td></tr></div>")(scope));
 					} else if (scope.selectedItem.id == '2') {
-						angular.element(document.getElementById('add-options')).append($compile(
-						"<div><input type='text' size='25'><input type='checkbox' value="+scope.countText+"></div>")(scope));
+						angular.element(document.getElementById('add-question')).append($compile(
+						"<tr><td><input ng-model='checked' type='text' size='25'><input type='checkbox' ng-checked='isChecked' value="+scope.countText+"></td></tr></div>")(scope));
 					}
 				});
 			};
