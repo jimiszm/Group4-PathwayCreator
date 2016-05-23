@@ -5,45 +5,50 @@
 <html>
 <head>
 <style type="text/css">
-/* #contextmenu-node {
-	position: absolute;
-	background-color: white;
-	border: solid #CCCCCC 1px;
-}
 
-.contextmenu-item {
-	margin: 0.5em;
-	padding-left: 0.5em;
-}
-
-.contextmenu-item:hover {
-	background-color: #CCCCCC;
-	cursor: default;
-} */
 .button {
 	background: -moz-linear-gradient(top,#0099CC 0%,#006699);
     background: -webkit-gradient(linear, left top, left bottom, from(#66CCCC), to(#00CCCC));
     border: 1px solid #000;
     color: #000;
-    padding: 3px 0;
+    padding: 3px 6px;
+}
+
+fieldset {
+  background: #FCFCFC;
+  padding: 16px;
+  border: 1px solid #D5D5D5;
+}
+
+.remove {
+  background: #C76868;
+  color: #FFF;
+  font-weight: bold;
+  font-size: 21px;
+  border: 0;
+  cursor: pointer;
+  display: inline-block;
+  padding: 2px 6px;
+  vertical-align: middle;
+  line-height: 100%;
 }
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>CarePathway Creator</title>
 <script type="text/javascript" src="lib/angular.min.js"></script>
 </head>
-<body bgcolor="#EEFFFF">
-	<table>
-		<tr>
-			<td><span style="font-size:x-large">CarePathway Creator</span></td>
+<body bgcolor="#EEEEEE" >
+	<table border="0" align="center" >
+		<tr align="center">
+			<td><span style="font-size:x-large; color:black">CarePathway Creator</span></td>
 		</tr>
 	</table>
-	<div ng-app="myApp" ng-controller="myCtrl" style="overflow-x: auto; overflow-y: auto;">
-		<table border="1" width="1100" height="500">
+	<div ng-app="myApp" ng-controller="myCtrl" style="overflow-x:auto; overflow-y:auto;">
+		<table border="0" width="100%" height="100%" style="table-layout:auto;" align="center">
 			<tr>
 				<!-- ------------------------------ left part Start ------------------------------ -->
 				<td>
-					<table border="0" width="550" height="500" bgcolor="white">
+					<table border="0" width="100%" height="100%" bgcolor="white" style="table-layout: auto;">
 						<tr height="20">
 							<td colspan="3">CONDITIONS:</td>
 						</tr>
@@ -55,20 +60,28 @@
 								</button>
 								<!-- <span ng-right-click="decrement()">{{value}}</span> -->
 								<!-- <span context-menu="myContext">Add Q</span> -->
-								<addbuttonsbutton></addbuttonsbutton>
+								<button class="button" ng-click="addNewQuestion()">Add questions</button>
 							</td>
 						</tr>
-						<tr height="200">
+						<tr height="200" align="left" valign="top">
 							<td colspan="3">
-								<div id="add-question"></div>
-							</td>
-						</tr>
-						<tr align="right" height="20">
-							<td colspan="3">
-								 <span ng-mouseover="mouseover()" ng-mouseleave="mouseleave()" 
-								 	ng-style="myStyle" ng-class="'button'" ng-click="reset()">Reset</span>
-								 <span ng-mouseover="mouseover2()" ng-mouseleave="mouseleave2()" 
-								 	ng-style="myStyle2" ng-class="'button'" type="submit" value="submit" ng-click="submit()">Submit</span>
+								<fieldset data-ng-repeat="question in questions">
+									<span>Question{{$index + 1}}:</span><button class="remove" ng-click="removeQuestion($index)">-</button>
+    								<input type="text" ng-model="question.name" placeholder="Enter question">
+    								<select ng-model="choice" ng-options='item as item.name for item in items'></select>
+    								<button class="button" ng-click="addNewAnswer(question)">Add answers</button>
+
+    								<div ng-if="choice.id == 1" data-ng-repeat="answer in question.answers">
+    									<input type="radio" name="radio" ng-model="$parent.radio" value="{{answer.name}}" ng-click="showAnswers(answer.id, 1)">
+      									<input type="text" ng-model="answer.name" placeholder="Enter answer">
+      									<button class="remove" ng-click="removeAnswer(question,$index)">-</button>
+    								</div>
+    								<div ng-if="choice.id == 2" data-ng-repeat="answer in question.answers">
+      									<input type='checkbox' name="checkBox" ng-model="checkbox" value="{{answer.name}}" ng-click="showAnswers2(answer.id, 2)">
+      									<input type="text" ng-model="answer.name" name="" placeholder="Enter answer">
+      									<button class="remove" ng-click="removeAnswer(question,$index)">-</button>
+    								</div>
+  								</fieldset>
 							</td>
 						</tr>
 						<tr>
@@ -76,19 +89,30 @@
 								<hr>
 							</td>
 						</tr>
-						<tr height="160">
+						<tr height="">
 							<td>
-								<table border="0" width="550" height="160">
+								<table border="0" width="100%" height="100%" style="table-layout:auto;">
 									<tr height="20">
 										<td colspan="3">EXIT CONDITIONS:</td>
 									</tr>
 									<tr height="20" align="left">
 										<td>* NEXT STEP NAME</td>
-										<td colspan="2"><input type="text" name="nextStep" size="30"></input></td>
+										<td colspan="2"><input type="text" name="nextStep" size="45"></input></td>
 									</tr>
-									<tr height="120">
+									<tr height="" align="left" valign="top">
 										<td colspan="3">
-										{{checked}}
+										<fieldset data-ng-repeat="question in questions">
+											<span>Question{{$index + 1}}:</span>
+											<!-- <button class="remove" ng-click="removeQuestion($index)">-</button> -->
+											<span>{{question.name}}</span>
+											<div ng-if="choice == 1" ng-show='clickOn == answer.id' data-ng-repeat="answer in question.answers">
+												<span>Answer: {{answer.name}}</span>
+											</div>
+											<div ng-if="choice == 2" data-ng-repeat="answer in question.answers">
+												<span>Answer: {{answer.name}}</span>
+											</div>
+											<!-- <button class="remove" ng-click="removeAnswer(question,$index)">-</button> -->
+		  								</fieldset>
 										</td>
 									</tr>
 								</table>
@@ -96,10 +120,8 @@
 						</tr>
 						<tr align="right" valign="middle" height="20">
 							<td>
-								 <span ng-mouseover="mouseover3()" ng-mouseleave="mouseleave3()" 
-								 	ng-style="myStyle3" ng-class="'button'">Reset</span>
-								 <span ng-mouseover="mouseover4()" ng-mouseleave="mouseleave4()" 
-								 	ng-style="myStyle4" ng-class="'button'">Submit</span>
+    							<button class="button" type="reset" value="reset" ng-click="reset()">Reset</button>
+    							<button class="button" type="submit" value="submit" ng-click="submit()">Save</button>
 							</td>
 						</tr>
 					</table>
@@ -107,7 +129,7 @@
 				<!-- ------------------------------ left part end ------------------------------ -->
 				<!-- ------------------------------ left part start ---------------------------- -->
 				<td>
-					<table border="1" width="550" height="500" bgcolor="white">
+					<table border="0" width="550" height="500" bgcolor="white" style="table-layout:auto;">
 					</table>
 				</td>
 				<!-- ------------------------------ right part end ------------------------------ -->
@@ -118,60 +140,10 @@
 	/***************************************** Yuzhu Add Start *******************************/
 		var app = angular.module('myApp', []);
 		app.controller('myCtrl', [ '$scope', function($scope) {
-			/*Mouse Moveover start*/
-			$scope.mouseover = function() {
-				$scope.myStyle = {
-					fontWeight : 'bold'
-				};
-			}
-			$scope.mouseleave = function() {
-				$scope.myStyle = {
-					fontWeight : 'normal'
-				}
-			}
-			$scope.mouseover2 = function() {
-				$scope.myStyle2 = {
-					fontWeight : 'bold'
-				};
-			}
-			$scope.mouseleave2 = function() {
-				$scope.myStyle2 = {
-					fontWeight : 'normal'
-				}
-			}
-			$scope.mouseover3 = function() {
-				$scope.myStyle3 = {
-					fontWeight : 'bold'
-				};
-			}
-			$scope.mouseleave3 = function() {
-				$scope.myStyle3 = {
-					fontWeight : 'normal'
-				}
-			}
-			$scope.mouseover4 = function() {
-				$scope.myStyle4 = {
-					fontWeight : 'bold'
-				};
-			}
-			$scope.mouseleave4 = function() {
-				$scope.myStyle4 = {
-					fontWeight : 'normal'
-				}
-			}
-			/*Mouse Moveover end*/
-			
 			/*Options start*/
 		   	$scope.items = [{ id: 1, name: 'Add Radio Button' },
 		  			     	{ id: 2, name: 'Add Input Area' },];
 			/*Options end*/
-			
-			/*Dynamically add questions start*/
-			$scope.count = 0;
-			$scope.countTemp = "";
-			$scope.countRadioB = 0;
-			$scope.countText = 0;
-			/*Dynamically add questions end*/
 			
 			/*Reset start*/
 			$scope.reset = function() {
@@ -186,93 +158,48 @@
 				$scope.showing[id] = true;
 			}
 			/*Submit end*/
-		} ]);
+			/*Add questions and answers start*/
+			$scope.questions = [{
+			    id: 'choice1',
+			    answers:[]
+			}];
 
-		/*Dynamically add questions start*/
-		app.directive("addbuttonsbutton", function() {
-			return {
-				restrict : "E",
-				template : "<button addbuttons class ='button'>Click to add questions</button>"
+ 			$scope.addNewQuestion = function() {
+   				var newItemNo = $scope.questions.length + 1;
+   				$scope.questions.push({
+     				'id': 'question' + newItemNo,
+     				answers:[]
+   				});
+ 			};
+
+			$scope.removeQuestion = function(ind) {
+   				$scope.questions.splice(ind,1);
+ 			};
+
+ 			$scope.addNewAnswer = function(question) {
+   				var newItemNo = question.answers.length + 1;
+   				question.answers.push({
+     				'id': 'answer' + newItemNo
+   				});
+ 			};
+
+			$scope.removeAnswer = function(question,ind) {
+   				question.answers.splice(ind,1);
+ 			};
+			/*Add questions and answers end*/
+
+			/*Show questions and answers start*/
+ 			$scope.showAnswers = function(con, cho) {
+				$scope.clickOn = con;
+				$scope.choice = cho;
 			}
-		});
-		app.directive("addbuttons",function($compile) {
-			return function(scope, element, attrs) {
-				element.bind("click", function() {
-					scope.count++;
-					/* scope.countTemp='selectedItem'+scope.count; */
-					angular.element(document.getElementById('add-question')).append($compile(
-						"<div><tr colspan='3'><td>Question"+scope.count+":</td><td>&nbsp;&nbsp;</td><td><select ng-model='selectedItem' ng-options='item as item.name for item in items'></select></td><td><button add class ='button'>ADD</button></td><td><input type='text' size='50'></td></tr>")(scope));
-				});
-			};
-		});
-		app.directive("add", function($compile) {
-			return function(scope, element, attrs) {
-				element.bind("click", function() {
-					/* alert(scope.countTemp.id); */
-					if (scope.selectedItem.id == '1') {
-						angular.element(document.getElementById('add-question')).append($compile(
-						"<tr><td><input type='radio' name="+scope.countRadioB+" value='1'><input ng-model='radioed' type='text' size='5'></td></tr></div>")(scope));
-					} else if (scope.selectedItem.id == '2') {
-						angular.element(document.getElementById('add-question')).append($compile(
-						"<tr><td><input ng-model='checked' type='text' size='25'><input type='checkbox' ng-checked='isChecked' value="+scope.countText+"></td></tr></div>")(scope));
-					}
-				});
-			};
-		});
-		/*Dynamically add questions end*/
 
-		/*-----------------------------backup souce-------------------------------------------*/
-		/* Mouse right click start*/
-		/* app.controller('myCtrl', function($scope) {
-		    $scope.value = 10;
-		    $scope.decrement = function() {
-		      $scope.value = $scope.value - 1; 
-		    };
-		});
-		
-		app.directive('ngRightClick', function($parse) {
-		    return function(scope, element, attrs) {
-		        var fn = $parse(attrs.ngRightClick);
-		        element.bind('contextmenu', function(event) {
-		            scope.$apply(function() {
-		                event.preventDefault();
-		                fn(scope, {$event:event});
-		            });
-		        });
-		    };
-		}); */
-		/* Mouse right click end*/
-		/*Mouse right click show menu start*/
-		/* app.controller( 'myCtrl', [ '$scope', function($scope) {
-			$scope.myContext = "<ul id='contextmenu-node'><li class='contextmenu-item' ng-click='clickedItem1()'> Add Q with Radio button </li><li class='contextmenu-item' ng-click='clickedItem2()'> Add Q with input</li></ul>";
-			$scope.clickedItem1 = function() {
-				console.log("Clicked item 1.");
-				alert('1');
-			};
-			$scope.clickedItem2 = function() {
-				console.log("Clicked item 2.");
-				alert('2');
-			};
+ 			$scope.showAnswers2 = function(con, cho) {
+				$scope.clickOn = con;
+				$scope.choice = cho;
+			}
+			/*Show questions and answers end*/
 		} ]);
-
-		app.directive("contextMenu", function($compile) {
-			contextMenu = {};
-			contextMenu.restrict = "AE";
-			contextMenu.link = function(lScope, lElem, lAttr) {
-				lElem.on("contextmenu", function(e) {
-					e.preventDefault();
-					lElem.append($compile(lScope[lAttr.contextMenu])(lScope));
-					$("#contextmenu-node").css("left", e.clientX);
-					$("#contextmenu-node").css("top", e.clientY);
-				});
-				lElem.on("mouseleave", function(e) {
-					if ($("#contextmenu-node"))
-						$("#contextmenu-node").remove();
-				});
-			};
-			return contextMenu;
-		}); */
-		/*Mouse right click show menu end*/
 	/***************************************** Yuzhu Add End *******************************/
 	</script>
 </body>
