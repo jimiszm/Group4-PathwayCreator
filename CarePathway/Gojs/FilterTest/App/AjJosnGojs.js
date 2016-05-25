@@ -1,13 +1,19 @@
 /**
  * Created by min on 19/05/2016.
  */
+var selectkey =0;
+var oldkeynumber = 0;
+var keynumber = 0;
+var selectlocation ={};
+var xselectlocation=175;
+var yselectlocation=0;
 var objs = {
     class: "go.GraphLinksModel",
     linkFromPortIdProperty: "fromPort",
     linkToPortIdProperty: "toPort",
     nodeDataArray: [
         {category: "Comment", loc: "360 -10", text: "This is first Pathway!", key: -13},
-        {key: -1, category: "Start", loc: "175 0", text: "Start"}
+        {key:keynumber, category: "Start", loc: "175 0", text: "Start \n Key:" + keynumber}
     ],
     linkDataArray: []
 }
@@ -65,8 +71,10 @@ var initial = function () {
                 // handle mouse enter/leave events to show/hide the ports
                 //mouseClick:  function (e, obj) { alert('111111111111');},
                 click:function(e,obj){
-                    alert(obj.part.data.text);
-
+                    selectkey = obj.part.data.key;
+                    document.getElementById("fromnode").value=selectkey ;
+                    selectlocation = obj.location.copy();
+                    //alert(selectlocation);
                 },
                 mouseEnter: function (e, obj) {
                     showPorts(obj.part, true);
@@ -279,30 +287,78 @@ var filtertest = angular.module('AjJsonGojs', []).config(function ($sceDelegateP
     initial();
 
 
+   // and new nod
     $scope.ajaddnode = function () {
+        oldkeynumber = keynumber;
+        keynumber++;
 
-       var diagram  = myDiagram;
+
+        var diagram  = myDiagram;
         var model = diagram.model;
 
+
+
+        var  nodtext = "Quetion: \n"+ $scope.questiontext + '\n' + 'Answer: ' +$scope.answertext;
+        var frompot ='';
+        var topot ='';
+
+        var positionvalue =  document.getElementById('positons').value;
+        if(positionvalue==1){
+            xselectlocation =selectlocation.x;
+            yselectlocation = selectlocation.y + 120;
+        }else if(positionvalue==2){
+            yselectlocation = selectlocation.y;
+            xselectlocation = selectlocation.x - 200;
+            frompot = 'L';
+            topot ='R';
+        }else if (positionvalue==3){
+            yselectlocation = selectlocation.y;
+            xselectlocation = selectlocation.x + 200;
+            frompot = 'R';
+            topot ='L';
+        }
+
+        var newloc = xselectlocation + " " + yselectlocation;
        diagram.startTransaction("Add State");
 
         model.addNodeData({
-            key: 1,
-            loc: "175 150",
-            text: "Question: 1: what's your blood type? \n answer: O"
+            key: keynumber,
+            loc: newloc,
+            text: nodtext + '\n'+ 'Nodekey: '+keynumber,
+            //points:go.Point.stringify(selectlocation)
         });
 
         model.addLinkData({
-            from: -1,
-            to: 1,
-            text: "risk score:1",
-            fromPort: "B",
-            toPort: "T"
+            from:selectkey,
+            to: keynumber,
+            text: $scope.tag,
+            fromPort:frompot,
+            toPort: topot
         });
 
         diagram.commitTransaction("Add State");
+    }
 
+    $scope.connect = function () {
 
+        var fromkey =  parseInt(document.getElementById('fromnode').value);
+        var tokey =  parseInt(document.getElementById('tonode').value);
+
+        var fromport = document.getElementById('fromport').value;
+        var toport = document.getElementById('toport').value;
+
+        var diagram  = myDiagram;
+        var model = diagram.model;
+        diagram.startTransaction("Add State");
+        model.addLinkData({
+            from:fromkey,
+            to: tokey,
+            text: $scope.tag,
+            fromPort:fromport,
+            toPort: toport
+        });
+
+        diagram.commitTransaction("Add State");
     }
 });
 
