@@ -1,6 +1,8 @@
 /**
  * Created by min on 19/05/2016.
  */
+
+commObj = 'zmmmmmmmmmmmmmmmmmm';
 var selectkey =0;
 var oldkeynumber = 0;
 var keynumber = 0;
@@ -17,10 +19,14 @@ var objs = {
     ],
     linkDataArray: []
 }
-
 var objsJson = {};
 
 var myDiagram = {};
+
+
+/*******************************************************************************************************************************************************************
+ *  Gojs functions  by Min Zan --------------------------------------------------------------------------------------------------------------------
+ ******************************************************************************************************************************************************************/
 
 var initial = function () {
     var Gojs = go.GraphObject.make;  // for conciseness in defining templates
@@ -73,6 +79,7 @@ var initial = function () {
                 click:function(e,obj){
                     selectkey = obj.part.data.key;
                     document.getElementById("fromnode").value=selectkey ;
+                    alert(obj.part.data.Title);
                     selectlocation = obj.location.copy();
                     //alert(selectlocation);
                 },
@@ -105,6 +112,26 @@ var initial = function () {
             });
     }
 
+    //go.("UndesiredEvent",
+    //    $(go.Node, "Auto",
+    //        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+    //        { selectionAdornmentTemplate: UndesiredEventAdornment },
+    //        $(go.Shape, "RoundedRectangle",
+    //            { fill: redgrad, portId: "", toLinkable: true, toEndSegmentLength: 50 }),
+    //        $(go.Panel, "Vertical", {defaultAlignment: go.Spot.TopLeft},
+    //
+    //            $(go.TextBlock, "Drop", textStyle(),
+    //                { stroke: "whitesmoke",
+    //                    minSize: new go.Size(80, NaN) },
+    //                new go.Binding("text", "text").makeTwoWay()),
+    //
+    //            $(go.Panel, "Vertical",
+    //                { defaultAlignment: go.Spot.TopLeft,
+    //                    itemTemplate: reasonTemplate },
+    //                new go.Binding("itemArray", "reasonsList").makeTwoWay()
+    //            )
+    //        )
+    //    ))
     // define the Node templates for regular nodes
 
     var lightText = 'whitesmoke';
@@ -118,14 +145,24 @@ var initial = function () {
                     new go.Binding("figure", "figure")),
                 Gojs(go.TextBlock,
                     {
-                        font: "bold 11pt Helvetica, Arial, sans-serif",
+                        font: "bold 8pt Helvetica, Cambria, sans-serif",
                         stroke: lightText,
                         margin: 8,
                         maxSize: new go.Size(160, NaN),
                         wrap: go.TextBlock.WrapFit,
                         editable: true
                     },
-                    new go.Binding("text").makeTwoWay())
+                    new go.Binding("text").makeTwoWay()),
+                Gojs(go.TextBlock,
+                    {
+                        font: "bold 8pt Helvetica, Cambria, sans-serif",
+                        stroke: lightText,
+                        margin: 8,
+                        maxSize: new go.Size(160, NaN),
+                        wrap: go.TextBlock.WrapFit,
+                        editable: true
+                    },
+                    new go.Binding("Title").makeTwoWay())
             ),
             // four named ports, one on each side:
             makePort("T", go.Spot.Top, false, true),
@@ -134,13 +171,38 @@ var initial = function () {
             makePort("B", go.Spot.Bottom, true, false)
         ));
 
+    //myDiagram.nodeTemplateMap.add("",  // the default category
+    //    Gojs(go.Node, "Spot", nodeStyle(),
+    //        // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
+    //        Gojs(go.Panel, "Auto",
+    //            Gojs(go.Shape, "Rectangle",
+    //                {fill: "#00A9C9", stroke: null},
+    //                new go.Binding("figure", "figure")),
+    //            Gojs(go.TextBlock,
+    //                {
+    //                    font: "bold 8pt Helvetica, Cambria, sans-serif",
+    //                    stroke: lightText,
+    //                    margin: 8,
+    //                    maxSize: new go.Size(160, NaN),
+    //                    wrap: go.TextBlock.WrapFit,
+    //                    editable: true
+    //                },
+    //                new go.Binding("text").makeTwoWay())
+    //        ),
+    //        // four named ports, one on each side:
+    //        makePort("T", go.Spot.Top, false, true),
+    //        makePort("L", go.Spot.Left, true, true),
+    //        makePort("R", go.Spot.Right, true, true),
+    //        makePort("B", go.Spot.Bottom, true, false)
+    //    ));
+
     myDiagram.nodeTemplateMap.add("Start",
         Gojs(go.Node, "Spot", nodeStyle(),
             Gojs(go.Panel, "Auto",
                 Gojs(go.Shape, "Circle",
                     {minSize: new go.Size(40, 40), fill: "#79C900", stroke: null}),
                 Gojs(go.TextBlock, "Start",
-                    {font: "bold 11pt Helvetica, Arial, sans-serif", stroke: lightText},
+                    {font: "bold 11pt Helvetica, Cambria, sans-serif", stroke: lightText},
                     new go.Binding("text"))
             ),
             // three named ports, one on each side except the top, all output only:
@@ -155,7 +217,7 @@ var initial = function () {
                 Gojs(go.Shape, "Circle",
                     {minSize: new go.Size(40, 40), fill: "#DC3C00", stroke: null}),
                 Gojs(go.TextBlock, "End",
-                    {font: "bold 11pt Helvetica, Arial, sans-serif", stroke: lightText},
+                    {font: "bold 11pt Helvetica, Cambria, sans-serif", stroke: lightText},
                     new go.Binding("text"))
             ),
             // three named ports, one on each side except the bottom, all input only:
@@ -163,6 +225,8 @@ var initial = function () {
             makePort("L", go.Spot.Left, false, true),
             makePort("R", go.Spot.Right, false, true)
         ));
+
+
 
     myDiagram.nodeTemplateMap.add("Comment",
         Gojs(go.Node, "Auto", nodeStyle(),
@@ -252,6 +316,8 @@ function showPorts(node, show) {
 
 // Show the diagram's model in JSON format that the user may edit
 function save() {
+
+
     document.getElementById("mySavedModel").value = myDiagram.model.toJson();
     myDiagram.isModified = false;
 }
@@ -275,18 +341,110 @@ function makeSVG() {
     }
 }
 
-var filtertest = angular.module('AjJsonGojs', []).config(function ($sceDelegateProvider) {
-    $sceDelegateProvider.resourceUrlWhitelist([
-        // Allow same origin resource loads.
-        'self',
-        // Allow loading from our assets domain.  Notice the difference between * and **.
-        'Form.html']);
-}).controller('AjJsonGojscontroller', function ($scope, $filter) {
+
+
+/******************************************************************************************************************************************************************
+ *  AngularJ functions  by Min Zan, Yuzhu Wang --------------------------------------------------------------------------------------------------------------------
+ ******************************************************************************************************************************************************************/
+
+var myApp = angular.module('myApp', []).
+
+    /***************************************************************************************************************************************************************
+     *   left part controller by yuzhu wang   --------------------------------------------------------------------------------------------------------
+     ***************************************************************************************************************************************************************/
+    controller('myCtrl', [ '$scope', function($scope) {
+
+    /*Options start*/
+    $scope.items = [{ id: 1, name: 'Add Radio Button' },
+        { id: 2, name: 'Add Input Area' },];
+    /*Options end*/
+
+    /*Reset start*/
+    $scope.reset = function() {
+        $scope.result = ''
+    }
+    /*Reset end*/
+
+    /*Add questions and answers start*/
+    $scope.questions = [{
+        id: 'choice1',
+        answers:[]
+    }];
+
+    $scope.addNewQuestion = function() {
+        var newItemNo = $scope.questions.length + 1;
+        $scope.questions.push({
+            'id': 'question' + newItemNo,
+            answers:[]
+        });
+    };
+
+    $scope.removeQuestion = function(ind) {
+        $scope.questions.splice(ind,1);
+    };
+
+    $scope.addNewAnswer = function(question, ind) {
+        var newItemNo = question.answers.length + 1;
+        question.answers.push({
+            'id': 'answer' + (ind+1).toString() + newItemNo.toString()
+        });
+    };
+
+    $scope.removeAnswer = function(question,ind) {
+        question.answers.splice(ind,1);
+    };
+    /*Add questions and answers end*/
+
+    /*Show questions and answers start*/
+    $scope.selected = '';
+    var y = '';
+    var x = '';
+    var z = '';
+    $scope.showAnswers = function(question, answer, co) {
+        $scope.result = '';
+        if (co == '1') {
+            x = question.name + answer.name;
+        } else if (co == '2') {
+            z = question.name;
+            y += answer.name;
+        }
+        $scope.selected = x + z + y;
+    }
+    /*Show questions and answers end*/
+
+    /*Submit start*/
+    $scope.submit = function() {
+        $scope.result = $scope.selected;
+        $scope.selected = '';
+        y = '';
+        x = '';
+        z = '';
+    }
+    /*Submit end*/
+
+    /*Save check start*/
+    $scope.submit2 = function() {
+        if ($scope.nextStep == undefined || $scope.nextStep == '') {
+            $scope.error = 'Please input the tittle of next step.';
+        } else {
+            $scope.error = 'No error.';
+        }
+    }
+    /*Save check end*/
+} ])
+
+    /****************************************************************************************************************************************************************
+     *   right part controller   by Min Zan -----------------------------------------------------------------------------------------
+     ***************************************************************************************************************************************************************/
+    .controller('AjJsonGojscontroller', function ($scope, $filter) {
 
     objsJson = $filter('json')(objs);
     initial();
 
 
+        $scope.getcommonObjs = function(){
+            alert(commObj);
+        }
    // and new nod
     $scope.ajaddnode = function () {
         oldkeynumber = keynumber;
@@ -325,6 +483,7 @@ var filtertest = angular.module('AjJsonGojs', []).config(function ($sceDelegateP
             key: keynumber,
             loc: newloc,
             text: nodtext + '\n'+ 'Nodekey: '+keynumber,
+            Title : 'Title'
             //points:go.Point.stringify(selectlocation)
         });
 
@@ -360,6 +519,12 @@ var filtertest = angular.module('AjJsonGojs', []).config(function ($sceDelegateP
 
         diagram.commitTransaction("Add State");
     }
+
+    $scope.savejson = function(){
+
+      comfirm('The Json data will be saved.' + myDiagram.model.toJson());
+    }
 });
+
 
 
