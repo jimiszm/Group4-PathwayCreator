@@ -67,29 +67,30 @@ fieldset {
 						<tr height="400" align="left" valign="top">
 							<td colspan="3">
 								<fieldset data-ng-repeat="question in questions">
-									<span>Question{{$index + 1}}:</span><button class="remove" ng-click="removeQuestion($index)">-</button>
+									<span >Question{{$index + 1}}:</span>
+									<button class="remove" ng-click="removeQuestion($index)">-</button>
     								<input type="text" ng-model="question.name" placeholder="Enter question">
     								<select ng-model="choice" ng-options='item as item.name for item in items'></select>
     								<button class="button" ng-click="addNewAnswer(question,$index)">Add answers</button>
 
     								<div ng-if="choice.id == 1" data-ng-repeat="answer in question.answers">
-    									<input type="radio" name='question.name' ng-model="$parent.radio" value="{{answer.name}}" ng-click="showAnswers(question, answer, choice.id)">
+    									<input type="radio" name="$parent.radioItem" ng-model="$parent.radioItem" value="{{answer.name}}" ng-click='clickOn(question, answer, null)'>
       									<input type="text" ng-model="answer.name" placeholder="Enter answer">
       									<button class="remove" ng-click="removeAnswer(question,$index)">-</button>
     								</div>
     								<div ng-if="choice.id == 2" data-ng-repeat="answer in question.answers">
-      									<input type='checkbox' name='question.name' ng-model="checkbox" value="{{answer.name}}" ng-click="showAnswers(question, answer, choice.id)">
-      									<input type="text" ng-model="answer.name" placeholder="Enter answer">
+      									<input type='checkbox' name='question.name' ng-model="checkbox.selected" value="" ng-click="clickOn(question, answer, checkbox.selected)">
+      									<input type="text" ng-model="answer.name" placeholder="Enter answer">{{answer.id}}{{}}
       									<button class="remove" ng-click="removeAnswer(question,$index)">-</button>
     								</div>
   								</fieldset>
 							</td>
 						</tr>
-						<tr align="right" height="20">
+						<!-- <tr align="right" height="20">
 							<td colspan="3">
     							<button class="button" type="submit" value="submit" ng-click="submit()">Submit</button>
 							</td>
-						</tr>
+						</tr> -->
 						<tr>
 							<td>
 								<hr>
@@ -109,17 +110,12 @@ fieldset {
 										<td colspan="3">
 										<!-- <fieldset data-ng-repeat="question in questions">
 											<span>Question{{$index + 1}}:</span>
-											<button class="remove" ng-click="removeQuestion($index)">-</button>
 											<span>{{question.name}}</span>
-											<div ng-if="choice == 1" ng-show='clickOn == answer.id' data-ng-repeat="answer in question.answers">
-												<span>Answer: {{answer.name}}</span>
+											<div data-ng-repeat="answer in question.answers">
+												<span ng-show='clickOnItem == answer.id || clickOnItem == true' >Answer: {{answer.name}}</span>
 											</div>
-											<div ng-if="choice == 2" data-ng-repeat="answer in question.answers">
-												<span>Answer: {{answer.name}}</span>
-											</div>
-											<button class="remove" ng-click="removeAnswer(question,$index)">-</button>
 		  								</fieldset> -->
-										<span>{{result}}</span>
+											<span>{{radioedItems}}{{checkedItems}}</span>
 										</td>
 									</tr>
 								</table>
@@ -171,13 +167,14 @@ fieldset {
 			
 			/*Reset start*/
 			$scope.reset = function() {
-				$scope.result = ''
+				$scope.radioedItems = [];
+				$scope.checkedItems = [];
 			}
 			/*Reset end*/
 			
 			/*Add questions and answers start*/
 			$scope.questions = [{
-			    id: 'choice1',
+			    id: 'question',
 			    answers:[]
 			}];
 
@@ -205,30 +202,20 @@ fieldset {
  			};
 			/*Add questions and answers end*/
 
-			/*Show questions and answers start*/
-			$scope.selected = '';
-			var y = '';
-			var x = '';
-			var z = '';
- 			$scope.showAnswers = function(question, answer, co) {
- 				$scope.result = '';
- 				if (co == '1') {
- 					x = question.name + answer.name;
- 				} else if (co == '2') {
- 					z = question.name;
- 					y += answer.name;	
- 				}
-				$scope.selected = x + z + y;
-			}
-			/*Show questions and answers end*/
-			
 			/*Submit start*/
-			$scope.submit = function() {
-				$scope.result = $scope.selected;
-				$scope.selected = '';
-				y = '';
-				x = '';
-				z = '';
+			$scope.checkedItems = [];
+			$scope.radioedItems = [];
+			$scope.clickOn = function(question, answer, ckecked) {
+				if (ckecked == true) {
+					$scope.checkedItems.push('Question :' + question.name + ' ' + 'Answer :' + answer.name);
+				} else if (ckecked == false) {
+					var temp2 = 'Question :' + question.name + ' ' + 'Answer :' + answer.name;
+					var ind = $scope.checkedItems.indexOf(temp2);
+					$scope.checkedItems.splice(ind,1);
+				} else {
+					$scope.radioedItems.splice(0, $scope.radioedItems.length);
+					$scope.radioedItems.push('Question :' + question.name + ' ' + 'Answer :' + answer.name);
+				}
 			}
 			/*Submit end*/
 			
@@ -239,8 +226,21 @@ fieldset {
 				} else {
 					$scope.error = 'No error.';
 				}
+				
+				if ($scope.error == 'No error.') {
+					alert(1);
+					var data = $.param({
+			            json: JSON.stringify({
+			                name: $scope.answer
+			            })
+			        });
+			        /* $http.post("/echo/json/", data).success(function(data, status) {
+			        	alert(data);
+			        }) */
+			        alert(data);
+				}
 			}
-			/*Save check end*/
+ 			/*Save check end*/
 		} ]);
 	/***************************************** Yuzhu Add End *******************************/
 	</script>
