@@ -2,7 +2,7 @@
  * Created by min on 19/05/2016.
  */
 
-commObj = 'zmmmmmmmmmmmmmmmmmm';
+commObj = 'Step0/Q:what is your name?/A:jimmy/Q:Waht is you age?/A：age<23/Step1';
 var selectkey =0;
 var oldkeynumber = 0;
 var keynumber = 0;
@@ -152,17 +152,17 @@ var initial = function () {
                         wrap: go.TextBlock.WrapFit,
                         editable: true
                     },
-                    new go.Binding("text").makeTwoWay()),
-                Gojs(go.TextBlock,
-                    {
-                        font: "bold 8pt Helvetica, Cambria, sans-serif",
-                        stroke: lightText,
-                        margin: 8,
-                        maxSize: new go.Size(160, NaN),
-                        wrap: go.TextBlock.WrapFit,
-                        editable: true
-                    },
-                    new go.Binding("Title").makeTwoWay())
+                    new go.Binding("text").makeTwoWay())
+                //Gojs(go.TextBlock,
+                //    {
+                //        font: "bold 8pt Helvetica, Cambria, sans-serif",
+                //        stroke: lightText,
+                //        margin: 8,
+                //        maxSize: new go.Size(160, NaN),
+                //        wrap: go.TextBlock.WrapFit,
+                //        editable: true
+                //    },
+                //    new go.Binding("Title").makeTwoWay())
             ),
             // four named ports, one on each side:
             makePort("T", go.Spot.Top, false, true),
@@ -520,9 +520,27 @@ var myApp = angular.module('myApp', []).
         diagram.commitTransaction("Add State");
     }
 
-    $scope.savejson = function(){
+        $scope.newadd=function(){
+            var titlespilt  = commObj.split('/');
+            alert(titlespilt[0]+'---'+titlespilt[titlespilt.length-1]);
 
-      comfirm('The Json data will be saved.' + myDiagram.model.toJson());
+            var text;
+            for( i = 0;i<titlespilt.length-2;i++){
+                if(i<titlespilt.length-2)
+                {
+                    text += titlespilt[i] + '\n';
+                }
+            }
+
+
+         }
+
+
+
+         $scope.savejson = function(){
+
+             alert(myDiagram.model.toJson());
+      //comfirm(myDiagram.model.toJson());
     }
 });
 
