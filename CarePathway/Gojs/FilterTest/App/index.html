@@ -1,0 +1,248 @@
+<html>
+<head>
+
+<style type="text/css">
+
+.errorSpanClass {
+  color: red;
+}
+.button {
+	background: -moz-linear-gradient(top,#0099CC 0%,#006699);
+    background: -webkit-gradient(linear, left top, left bottom, from(#66CCCC), to(#00CCCC));
+    border: 1px solid #000;
+    color: #000;
+    padding: 3px 6px;
+}
+
+fieldset {
+  background: #FCFCFC;
+  padding: 16px;
+  border: 1px solid #D5D5D5;
+}
+
+.remove {
+  background: #C76868;
+  color: #FFF;
+  font-weight: bold;
+  font-size: 21px;
+  border: 0;
+  cursor: pointer;
+  display: inline-block;
+  padding: 2px 6px;
+  vertical-align: middle;
+  line-height: 100%;
+}
+</style>
+	<!--<script  language="JavaScript" src="AjJosnGojs.js"></script>-->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>CarePathway Creator</title>
+	<script type="text/javascript" src="lib/angular.js"></script><button onclick="setvalue();">set value</button>
+</head>
+<body bgcolor="#EEEEEE" style="width: 98%" >
+	<table border="0" align="center" >
+		<tr align="center">
+			<td><span style="font-size:x-large; color:black">CarePathway Creator</span></td>
+		</tr>
+	</table>
+	<div ng-app="myApp" ng-controller="myCtrl" style="overflow-x:auto; overflow-y:auto;">
+		<table border="0" width="100%" style="table-layout:auto;" align="center">
+			<tr>
+				<!-- ------------------------------ left part Start ------------------------------ -->
+				<td>
+					<table border="0" width="100%" height="100%" bgcolor="white" style="table-layout: auto;">
+						<tr height="20">
+							<td colspan="3">CONDITIONS:</td>
+						</tr>
+						<tr height="20">
+							<td colspan="3" valign="middle">
+								<input type="text" name="searchArea" size="50"></input>
+								<button onclick="alert('This area will show the information return from NPL System.');">
+									<img width="15" height="15" src="search.jpg" border="0" />
+								</button>
+								<button class="button" ng-click="addNewQuestion()">Add questions</button>
+							</td>
+						</tr>
+						<tr height="185" align="left" valign="top">
+							<td colspan="3">
+								<fieldset data-ng-repeat="question in questions">
+									<span>Question{{$index + 1}}:</span><button class="remove" ng-click="removeQuestion($index)">-</button>
+    								<input type="text" ng-model="question.name" placeholder="Enter question">
+    								<select ng-model="choice" ng-options='item as item.name for item in items'></select>
+    								<button class="button" ng-click="addNewAnswer(question,$index)">Add answers</button>
+
+    								<div ng-if="choice.id == 1" data-ng-repeat="answer in question.answers">
+    									<input type="radio" name='question.name' ng-model="$parent.radio" value="{{answer.name}}" ng-click="showAnswers(question, answer, choice.id)">
+      									<input type="text" ng-model="answer.name" placeholder="Enter answer">
+      									<button class="remove" ng-click="removeAnswer(question,$index)">-</button>
+    								</div>
+    								<div ng-if="choice.id == 2" data-ng-repeat="answer in question.answers">
+      									<input type='checkbox' name='question.name' ng-model="checkbox" value="{{answer.name}}" ng-click="showAnswers(question, answer, choice.id)">
+      									<input type="text" ng-model="answer.name" placeholder="Enter answer">
+      									<button class="remove" ng-click="removeAnswer(question,$index)">-</button>
+    								</div>
+  								</fieldset>
+							</td>
+						</tr>
+						<tr align="right" height="20">
+							<td colspan="3">
+    							<button class="button" type="submit" value="submit" ng-click="submit()">Submit</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<hr>
+							</td>
+						</tr>
+						<tr height="">
+							<td>
+								<table border="0" width="100%" height="130" style="table-layout:auto;">
+									<tr height="20">
+										<td colspan="3">EXIT CONDITIONS:</td>
+									</tr>
+									<tr height="20" align="left">
+										<td>* NEXT STEP NAME</td>
+										<td colspan="2"><input type="text" name="nextStep" ng-model="nextStep" size="45"></input></td>
+									</tr>
+									<tr height="" align="left" valign="top">
+										<td colspan="3">
+										<!-- <fieldset data-ng-repeat="question in questions">
+											<span>Question{{$index + 1}}:</span>
+											<button class="remove" ng-click="removeQuestion($index)">-</button>
+											<span>{{question.name}}</span>
+											<div ng-if="choice == 1" ng-show='clickOn == answer.id' data-ng-repeat="answer in question.answers">
+												<span>Answer: {{answer.name}}</span>
+											</div>
+											<div ng-if="choice == 2" data-ng-repeat="answer in question.answers">
+												<span>Answer: {{answer.name}}</span>
+											</div>
+											<button class="remove" ng-click="removeAnswer(question,$index)">-</button>
+		  								</fieldset> -->
+										<span>{{result}}</span>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr align="right" valign="middle" height="20">
+							<td>
+    							<button class="button" type="reset" value="reset" ng-click="reset()">Reset</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<hr>
+							</td>
+						</tr>
+						<tr align="left" valign="top" height="80">
+							<td>
+    							<span>PML ERRORS AREA:</span>
+    							<br>
+    							<span class="errorSpanClass">{{error}}</span>
+							</td>
+						</tr>
+						<tr align="right" valign="middle" height="20">
+							<td>
+    							<button class="button" type="submit" value="submit" ng-click="submit2()">Save</button>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<!-- ------------------------------ left part end ------------------------------ -->
+
+			</tr>
+		</table>
+	</div>
+	<!--<script type="text/javascript">-->
+
+		<!--var setvalue = function (){-->
+
+			<!--setcommObj( "Yuzhu add.....................");-->
+		<!--}-->
+	<!--/***************************************** Yuzhu Add Start *******************************/-->
+		<!--var app = angular.module('myApp', []);-->
+		<!--app.controller('myCtrl', [ '$scope', function($scope) {-->
+			<!---->
+			<!--/*Options start*/-->
+		   	<!--$scope.items = [{ id: 1, name: 'Add Radio Button' },-->
+		  			     	<!--{ id: 2, name: 'Add Input Area' },];-->
+			<!--/*Options end*/-->
+			<!---->
+			<!--/*Reset start*/-->
+			<!--$scope.reset = function() {-->
+				<!--$scope.result = ''-->
+			<!--}-->
+			<!--/*Reset end*/-->
+			<!---->
+			<!--/*Add questions and answers start*/-->
+			<!--$scope.questions = [{-->
+			    <!--id: 'choice1',-->
+			    <!--answers:[]-->
+			<!--}];-->
+
+ 			<!--$scope.addNewQuestion = function() {-->
+   				<!--var newItemNo = $scope.questions.length + 1;-->
+   				<!--$scope.questions.push({-->
+     				<!--'id': 'question' + newItemNo,-->
+     				<!--answers:[]-->
+   				<!--});-->
+ 			<!--};-->
+
+			<!--$scope.removeQuestion = function(ind) {-->
+   				<!--$scope.questions.splice(ind,1);-->
+ 			<!--};-->
+
+ 			<!--$scope.addNewAnswer = function(question, ind) {-->
+   				<!--var newItemNo = question.answers.length + 1;-->
+   				<!--question.answers.push({-->
+     				<!--'id': 'answer' + (ind+1).toString() + newItemNo.toString()-->
+   				<!--});-->
+ 			<!--};-->
+
+			<!--$scope.removeAnswer = function(question,ind) {-->
+   				<!--question.answers.splice(ind,1);-->
+ 			<!--};-->
+			<!--/*Add questions and answers end*/-->
+
+			<!--/*Show questions and answers start*/-->
+			<!--$scope.selected = '';-->
+			<!--var y = '';-->
+			<!--var x = '';-->
+			<!--var z = '';-->
+ 			<!--$scope.showAnswers = function(question, answer, co) {-->
+ 				<!--$scope.result = '';-->
+ 				<!--if (co == '1') {-->
+ 					<!--x = question.name + answer.name;-->
+ 				<!--} else if (co == '2') {-->
+ 					<!--z = question.name;-->
+ 					<!--y += answer.name;	-->
+ 				<!--}-->
+				<!--$scope.selected = x + z + y;-->
+			<!--}-->
+			<!--/*Show questions and answers end*/-->
+			<!---->
+			<!--/*Submit start*/-->
+			<!--$scope.submit = function() {-->
+				<!--$scope.result = $scope.selected;-->
+				<!--$scope.selected = '';-->
+				<!--y = '';-->
+				<!--x = '';-->
+				<!--z = '';-->
+			<!--}-->
+			<!--/*Submit end*/-->
+			<!---->
+			<!--/*Save check start*/-->
+ 			<!--$scope.submit2 = function() {-->
+				<!--if ($scope.nextStep == undefined || $scope.nextStep == '') {-->
+					<!--$scope.error = 'Please input the tittle of next step.';-->
+				<!--} else {-->
+					<!--$scope.error = 'No error.';-->
+				<!--}-->
+			<!--}-->
+			<!--/*Save check end*/-->
+		<!--} ]);-->
+	<!--/***************************************** Yuzhu Add End *******************************/-->
+	<!--</script>-->
+</body>
+<!--<script language="JavaScript" src="index.js"></script>-->
+<script language="JavaScript" src="AjJosnGojs.js" ></script>
+</html>
