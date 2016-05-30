@@ -2,20 +2,23 @@
  * Created by min on 19/05/2016.
  */
 
-commObj = 'Step0/Q:what is your name?/A:jimmy/Q:Waht is you age?/A：age<23/Step1';
-var selectkey =0;
+commObj = '/Q:what is your name?/C:jimmy/Q:Waht is you age?/C：age<23/Step1';
+commObj1 = 'Step1/Q:what is your sex?/C:Male/Q:Waht is you weight?/C：74KG/Step2'
+
+slectedStepname = '';
+var selectkey = 0;
 var oldkeynumber = 0;
 var keynumber = 0;
-var selectlocation ={};
-var xselectlocation=175;
-var yselectlocation=0;
+var selectlocation = {};
+var xselectlocation = 175;
+var yselectlocation = 0;
 var objs = {
     class: "go.GraphLinksModel",
     linkFromPortIdProperty: "fromPort",
     linkToPortIdProperty: "toPort",
     nodeDataArray: [
         {category: "Comment", loc: "360 -10", text: "This is first Pathway!", key: -13},
-        {key:keynumber, category: "Start", loc: "175 0", text: "Start \n Key:" + keynumber}
+        //{key:keynumber, category: "Start", loc: "175 0", text: "Start \n Key:" + keynumber}
     ],
     linkDataArray: []
 }
@@ -76,10 +79,11 @@ var initial = function () {
                 //shadowColor: "#888",
                 // handle mouse enter/leave events to show/hide the ports
                 //mouseClick:  function (e, obj) { alert('111111111111');},
-                click:function(e,obj){
+                click: function (e, obj) {
                     selectkey = obj.part.data.key;
-                    document.getElementById("fromnode").value=selectkey ;
-                    alert(obj.part.data.Title);
+                    document.getElementById("fromnode").value = selectkey;
+                    alert(obj.part.data.stepname);
+                    slectedStepname = obj.part.data.stepname;
                     selectlocation = obj.location.copy();
                     //alert(selectlocation);
                 },
@@ -227,7 +231,6 @@ var initial = function () {
         ));
 
 
-
     myDiagram.nodeTemplateMap.add("Comment",
         Gojs(go.Node, "Auto", nodeStyle(),
             Gojs(go.Shape, "File",
@@ -341,6 +344,10 @@ function makeSVG() {
     }
 }
 
+var setcommonObjs = function () {
+    alert('set commoobj');
+    commObj = document.getElementById("commonobjs").value;
+}
 
 
 /******************************************************************************************************************************************************************
@@ -352,197 +359,419 @@ var myApp = angular.module('myApp', []).
     /***************************************************************************************************************************************************************
      *   left part controller by yuzhu wang   --------------------------------------------------------------------------------------------------------
      ***************************************************************************************************************************************************************/
-    controller('myCtrl', [ '$scope', function($scope) {
+    controller('myCtrl', ['$scope', function ($scope) {
 
-    /*Options start*/
-    $scope.items = [{ id: 1, name: 'Add Radio Button' },
-        { id: 2, name: 'Add Input Area' },];
-    /*Options end*/
+        /*Options start*/
+        $scope.items = [{id: 1, name: 'Add Radio Button'},
+            {id: 2, name: 'Add Input Area'},];
+        /*Options end*/
 
-    /*Reset start*/
-    $scope.reset = function() {
-        $scope.result = ''
-    }
-    /*Reset end*/
-
-    /*Add questions and answers start*/
-    $scope.questions = [{
-        id: 'choice1',
-        answers:[]
-    }];
-
-    $scope.addNewQuestion = function() {
-        var newItemNo = $scope.questions.length + 1;
-        $scope.questions.push({
-            'id': 'question' + newItemNo,
-            answers:[]
-        });
-    };
-
-    $scope.removeQuestion = function(ind) {
-        $scope.questions.splice(ind,1);
-    };
-
-    $scope.addNewAnswer = function(question, ind) {
-        var newItemNo = question.answers.length + 1;
-        question.answers.push({
-            'id': 'answer' + (ind+1).toString() + newItemNo.toString()
-        });
-    };
-
-    $scope.removeAnswer = function(question,ind) {
-        question.answers.splice(ind,1);
-    };
-    /*Add questions and answers end*/
-
-    /*Show questions and answers start*/
-    $scope.selected = '';
-    var y = '';
-    var x = '';
-    var z = '';
-    $scope.showAnswers = function(question, answer, co) {
-        $scope.result = '';
-        if (co == '1') {
-            x = question.name + answer.name;
-        } else if (co == '2') {
-            z = question.name;
-            y += answer.name;
+        /*Reset start*/
+        $scope.reset = function () {
+            $scope.result = ''
         }
-        $scope.selected = x + z + y;
-    }
-    /*Show questions and answers end*/
+        /*Reset end*/
 
-    /*Submit start*/
-    $scope.submit = function() {
-        $scope.result = $scope.selected;
+        /*Add questions and answers start*/
+        $scope.questions = [{
+            id: 'choice1',
+            answers: []
+        }];
+
+        $scope.addNewQuestion = function () {
+            var newItemNo = $scope.questions.length + 1;
+            $scope.questions.push({
+                'id': 'question' + newItemNo,
+                answers: []
+            });
+        };
+
+        $scope.removeQuestion = function (ind) {
+            $scope.questions.splice(ind, 1);
+        };
+
+        $scope.addNewAnswer = function (question, ind) {
+            var newItemNo = question.answers.length + 1;
+            question.answers.push({
+                'id': 'answer' + (ind + 1).toString() + newItemNo.toString()
+            });
+        };
+
+        $scope.removeAnswer = function (question, ind) {
+            question.answers.splice(ind, 1);
+        };
+        /*Add questions and answers end*/
+
+        /*Show questions and answers start*/
         $scope.selected = '';
-        y = '';
-        x = '';
-        z = '';
-    }
-    /*Submit end*/
-
-    /*Save check start*/
-    $scope.submit2 = function() {
-        if ($scope.nextStep == undefined || $scope.nextStep == '') {
-            $scope.error = 'Please input the tittle of next step.';
-        } else {
-            $scope.error = 'No error.';
+        var y = '';
+        var x = '';
+        var z = '';
+        $scope.showAnswers = function (question, answer, co) {
+            $scope.result = '';
+            if (co == '1') {
+                x = question.name + answer.name;
+            } else if (co == '2') {
+                z = question.name;
+                y += answer.name;
+            }
+            $scope.selected = x + z + y;
         }
-    }
-    /*Save check end*/
-} ])
+        /*Show questions and answers end*/
+
+        /*Submit start*/
+        $scope.submit = function () {
+            $scope.result = $scope.selected;
+            $scope.selected = '';
+            y = '';
+            x = '';
+            z = '';
+        }
+        /*Submit end*/
+
+        /*Save check start*/
+        $scope.submit2 = function () {
+            if ($scope.nextStep == undefined || $scope.nextStep == '') {
+                $scope.error = 'Please input the tittle of next step.';
+            } else {
+                $scope.error = 'No error.';
+            }
+        }
+        /*Save check end*/
+    }])
 
     /****************************************************************************************************************************************************************
      *   right part controller   by Min Zan -----------------------------------------------------------------------------------------
      ***************************************************************************************************************************************************************/
     .controller('AjJsonGojscontroller', function ($scope, $filter) {
 
-    objsJson = $filter('json')(objs);
-    initial();
+        objsJson = $filter('json')(objs);
+        initial();
 
 
-        $scope.getcommonObjs = function(){
-            alert(commObj);
-        }
-   // and new nod
-    $scope.ajaddnode = function () {
-        oldkeynumber = keynumber;
-        keynumber++;
+        /**----------------------------------------------------------------------------
+         *  newadd for Form part
+         ---------------------------------------------------------------------------- */
+        $scope.newadd = function () {
 
 
-        var diagram  = myDiagram;
-        var model = diagram.model;
+            var frompot = "B";
+            var topot = "T";
+            alert("selectlocation: "+ selectlocation.x +"   "+selectlocation.y);
+            var positionvalue = document.getElementById('positons').value;
+
+            if (positionvalue == 1) {
+                xselectlocation = selectlocation.x;
+                yselectlocation = selectlocation.y + 120;
+            } else if (positionvalue == 2) {
+                yselectlocation = selectlocation.y;
+                xselectlocation = selectlocation.x - 200;
+                frompot = 'L';
+                topot = 'R';
+            } else if (positionvalue == 3) {
+                yselectlocation = selectlocation.y;
+                xselectlocation = selectlocation.x + 200;
+                frompot = 'R';
+                topot = 'L';
+            }
+            var newloc = xselectlocation+" " +yselectlocation ;
+
+            alert(newloc);
+
+            var diagram = myDiagram;
+            var model = diagram.model;
 
 
+            var titlespilt = commObj.split('/');
+            alert(titlespilt[0] + '---' + titlespilt[titlespilt.length - 1]);
 
-        var  nodtext = "Quetion: \n"+ $scope.questiontext + '\n' + 'Answer: ' +$scope.answertext;
-        var frompot ='';
-        var topot ='';
+            var fromstep = "";
+            fromstep = titlespilt[0];
+            var tostep = "";
+            tostep = titlespilt[titlespilt.length - 1];
 
-        var positionvalue =  document.getElementById('positons').value;
-        if(positionvalue==1){
-            xselectlocation =selectlocation.x;
-            yselectlocation = selectlocation.y + 120;
-        }else if(positionvalue==2){
-            yselectlocation = selectlocation.y;
-            xselectlocation = selectlocation.x - 200;
-            frompot = 'L';
-            topot ='R';
-        }else if (positionvalue==3){
-            yselectlocation = selectlocation.y;
-            xselectlocation = selectlocation.x + 200;
-            frompot = 'R';
-            topot ='L';
-        }
+            var nodetext = "";
+            var questions = "";
+            var answers = "";
 
-        var newloc = xselectlocation + " " + yselectlocation;
-       diagram.startTransaction("Add State");
 
-        model.addNodeData({
-            key: keynumber,
-            loc: newloc,
-            text: nodtext + '\n'+ 'Nodekey: '+keynumber,
-            Title : 'Title'
-            //points:go.Point.stringify(selectlocation)
-        });
+            for (i = 1; i < titlespilt.length - 1; i++) {
 
-        model.addLinkData({
-            from:selectkey,
-            to: keynumber,
-            text: $scope.tag,
-            fromPort:frompot,
-            toPort: topot
-        });
+                if (i % 2 == 1) {
+                    questions += titlespilt[i] + '\n';
+                } else if (i % 2 == 0) {
+                    answers += titlespilt[i] + '\n';
+                }
 
-        diagram.commitTransaction("Add State");
-    }
+            }
 
-    $scope.connect = function () {
+            questions = questions.substring(0, questions.length - 1);
+            answers = answers.substring(0, answers.length - 1);
 
-        var fromkey =  parseInt(document.getElementById('fromnode').value);
-        var tokey =  parseInt(document.getElementById('tonode').value);
+            if (fromstep == "")         // it means create 1st node and 2ed node
+            {
+                alert('it means create 1st node and 2ed node');
+                diagram.startTransaction("Add State");
 
-        var fromport = document.getElementById('fromport').value;
-        var toport = document.getElementById('toport').value;
+                model.addNodeData({
+                    key: keynumber,
+                    loc: "175 0",
+                    text: 'Start' + '\n' + questions,
+                    stepname: 'Start'
+                    //points:go.Point.stringify(selectlocation)
+                });
 
-        var diagram  = myDiagram;
-        var model = diagram.model;
-        diagram.startTransaction("Add State");
-        model.addLinkData({
-            from:fromkey,
-            to: tokey,
-            text: $scope.tag,
-            fromPort:fromport,
-            toPort: toport
-        });
+                keynumber++;
 
-        diagram.commitTransaction("Add State");
-    }
+                model.addNodeData({
+                    key: keynumber,
+                    loc: "175 160",
+                    text: tostep + '\n' + 'Start conditions : \n' + answers,
+                    stepname: tostep
+                    //points:go.Point.stringify(selectlocation)
+                });
+                keynumber++;
+                //{key:keynumber, category: "Start", loc: "175 0", text: "Start \n Key:" + keynumber}
 
-        $scope.newadd=function(){
-            var titlespilt  = commObj.split('/');
-            alert(titlespilt[0]+'---'+titlespilt[titlespilt.length-1]);
+                model.addLinkData({
+                    from: 0,
+                    to: keynumber - 1,
+                    text: 'Tags',
+                    fromPort: frompot,
+                    toPort: topot
+                });
 
-            var text;
-            for( i = 0;i<titlespilt.length-2;i++){
-                if(i<titlespilt.length-2)
+                diagram.commitTransaction("Add State");
+            } else     // after the first node was created  the next anctions divided into to types 1st is connect two nodes   2ed is to update selected node then create new node
+            {
+
+                if (tostep == "") {
+                    alert('Error! you must input next step name!');
+                } else            // if tostepname is a new one update selected node and create   if tostepname  exists upate and link
                 {
-                    text += titlespilt[i] + '\n';
+                    isfound = false;
+                    for (var i = 0; i < diagram.model.nodeDataArray.length; i++) {
+
+
+                        if (diagram.model.nodeDataArray[i].stepname == tostep) {   // just link 2 node
+                            // update the text of tostep
+
+                            var stepname = "";
+                            var lastString = "";
+
+                            stepname = diagram.model.nodeDataArray[i].text.substring(0, diagram.model.nodeDataArray[i].text.indexOf('\n'));
+
+                            laststring = diagram.model.nodeDataArray[i].text.substring((diagram.model.nodeDataArray[i].text.indexOf('\n') + 1), diagram.model.nodeDataArray[i].text.length);
+
+                            var newtext = stepname + '\n' + fromstep + ' conditions: \n' + answers + '\n' + laststring;
+
+                            diagram.startTransaction("Add Link");
+                            diagram.model.setDataProperty(diagram.model.nodeDataArray[i], 'text', newtext);
+
+
+                            if (fromstep == tostep) {
+                                frompot = 'L';
+                                topot = "T";
+                            }
+
+                            // link to steps
+                            model.addLinkData({
+                                from: selectkey,
+                                to: diagram.model.nodeDataArray[i].key,
+                                text: 'Link',
+                                fromPort: frompot,
+                                toPort: topot
+                            });
+                            diagram.commitTransaction("Add Link");
+                            isfound = true;
+                        }
+
+                        if (isfound) {
+                            for (var i = 0; i < diagram.model.nodeDataArray.length; i++) {
+                                if (diagram.model.nodeDataArray[i].stepname == fromstep) {   // update text of from step
+                                    diagram.startTransaction("update data");
+                                    var newtext = diagram.model.nodeDataArray[i].text + '\n' + questions;
+                                    diagram.model.setDataProperty(diagram.model.nodeDataArray[i], 'text', newtext);
+                                    diagram.commitTransaction("update data");
+                                }
+                            }
+                        }
+
+                    }
+
+                    if (!isfound) {     //create new node and link them
+
+                        xselectlocation = selectlocation.x;
+                        yselectlocation = selectlocation.y + 160;
+                        var newloc = xselectlocation + " " + yselectlocation;
+
+                        diagram.startTransaction("Add new add link");
+                        //alert('diagram.model.nodeDataArray.length:' +diagram.model.nodeDataArray.length);
+
+                        for (var i = 0; i < diagram.model.nodeDataArray.length; i++) {
+
+
+                            if (diagram.model.nodeDataArray[i].key == parseInt(selectkey)) {
+                                var newtext = diagram.model.nodeDataArray[i].text + '\n' + questions;
+                                diagram.model.setDataProperty(diagram.model.nodeDataArray[i], 'text', newtext);
+
+                            }
+                        }
+
+                        model.addNodeData({
+                            key: keynumber,
+                            loc: newloc,
+                            text: tostep + '\n' + fromstep + ' contitions: \n' + answers,
+                            stepname: tostep
+                            //points:go.Point.stringify(selectlocation)
+                        });
+                        keynumber++;
+
+                        model.addLinkData({
+                            from: selectkey,
+                            to: keynumber - 1,
+                            text: 'Tags',
+                            fromPort: frompot,
+                            toPort: topot
+                        });
+
+                        diagram.startTransaction("Add new add link");
+                    }
+
                 }
             }
 
 
-         }
+            var findKeyByStepNmae = function (stepname) {
+
+            }
+
+            //
+            //var positionvalue =  document.getElementById('positons').value;
+            //if(positionvalue==1){
+            //    xselectlocation =selectlocation.x;
+            //    yselectlocation = selectlocation.y + 120;
+            //}else if(positionvalue==2){
+            //    yselectlocation = selectlocation.y;
+            //    xselectlocation = selectlocation.x - 200;
+            //    frompot = 'L';
+            //    topot ='R';
+            //}else if (positionvalue==3){
+            //    yselectlocation = selectlocation.y;
+            //    xselectlocation = selectlocation.x + 200;
+            //    frompot = 'R';
+            //    topot ='L';
+            //}
+            //
+            //var newloc = xselectlocation + " " + yselectlocation;
+            //diagram.startTransaction("Add State");
+            //
+            //model.addNodeData({
+            //    key: keynumber,
+            //    loc: newloc,
+            //    text: nodtext + '\n'+ 'Nodekey: '+keynumber,
+            //    Title : 'Title'
+            //    //points:go.Point.stringify(selectlocation)
+            //});
+            //
+            //model.addLinkData({
+            //    from:selectkey,
+            //    to: keynumber,
+            //    text: $scope.tag,
+            //    fromPort:frompot,
+            //    toPort: topot
+            //});
+            //
+            //diagram.commitTransaction("Add State");
+        }
 
 
+        /*********************************************************************************************************************
+         *   test add function for graph part
+         **********************************************************************************************************************/
+        // and new nod
+        //$scope.ajaddnode = function () {
+        //    oldkeynumber = keynumber;
+        //    keynumber++;
+        //
+        //
+        //    var diagram  = myDiagram;
+        //    var model = diagram.model;
+        //
+        //
+        //
+        //    var  nodtext = "Quetion: \n"+ $scope.questiontext + '\n' + 'Answer: ' +$scope.answertext;
+        //    var frompot ='';
+        //    var topot ='';
+        //
+        //    var positionvalue =  document.getElementById('positons').value;
+        //    if(positionvalue==1){
+        //        xselectlocation =selectlocation.x;
+        //        yselectlocation = selectlocation.y + 120;
+        //    }else if(positionvalue==2){
+        //        yselectlocation = selectlocation.y;
+        //        xselectlocation = selectlocation.x - 200;
+        //        frompot = 'L';
+        //        topot ='R';
+        //    }else if (positionvalue==3){
+        //        yselectlocation = selectlocation.y;
+        //        xselectlocation = selectlocation.x + 200;
+        //        frompot = 'R';
+        //        topot ='L';
+        //    }
+        //
+        //    var newloc = xselectlocation + " " + yselectlocation;
+        //   diagram.startTransaction("Add State");
+        //
+        //    model.addNodeData({
+        //        key: keynumber,
+        //        loc: newloc,
+        //        text: nodtext + '\n'+ 'Nodekey: '+keynumber,
+        //        Title : 'Title'
+        //        //points:go.Point.stringify(selectlocation)
+        //    });
+        //
+        //    model.addLinkData({
+        //        from:selectkey,
+        //        to: keynumber,
+        //        text: $scope.tag,
+        //        fromPort:frompot,
+        //        toPort: topot
+        //    });
+        //
+        //    diagram.commitTransaction("Add State");
+        //}
+        /*********************************************************************************************************************
+         *   test connect function for graph part
+         **********************************************************************************************************************/
+            //$scope.connect = function () {
+            //
+            //    var fromkey =  parseInt(document.getElementById('fromnode').value);
+            //    var tokey =  parseInt(document.getElementById('tonode').value);
+            //
+            //    var fromport = document.getElementById('fromport').value;
+            //    var toport = document.getElementById('toport').value;
+            //
+            //    var diagram  = myDiagram;
+            //    var model = diagram.model;
+            //    diagram.startTransaction("Add State");
+            //    model.addLinkData({
+            //        from:fromkey,
+            //        to: tokey,
+            //        text: $scope.tag,
+            //        fromPort:fromport,
+            //        toPort: toport
+            //    });
+            //
+            //    diagram.commitTransaction("Add State");
+            //}
 
-         $scope.savejson = function(){
+        $scope.savejson = function () {
 
-             alert(myDiagram.model.toJson());
-      //comfirm(myDiagram.model.toJson());
-    }
-});
+            alert(myDiagram.model.toJson());
+            //comfirm(myDiagram.model.toJson());
+        }
+    });
 
 
 
