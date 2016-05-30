@@ -85,7 +85,7 @@ var initial = function () {
                     alert(obj.part.data.stepname);
                     slectedStepname = obj.part.data.stepname;
                     selectlocation = obj.location.copy();
-                    //alert(selectlocation);
+                    alert(selectlocation);
                 },
                 mouseEnter: function (e, obj) {
                     showPorts(obj.part, true);
@@ -455,14 +455,16 @@ var myApp = angular.module('myApp', []).
         $scope.newadd = function () {
 
 
-            var frompot = "B";
-            var topot = "T";
-            alert("selectlocation: "+ selectlocation.x +"   "+selectlocation.y);
+            //var frompot = document.getElementById('fromport').value;
+            //var topot = document.getElementById('toport').value;
+            //alert("selectlocation: "+ selectlocation.x +"   "+selectlocation.y);
             var positionvalue = document.getElementById('positons').value;
 
             if (positionvalue == 1) {
+                frompot = 'B';
+                topot = 'T';
                 xselectlocation = selectlocation.x;
-                yselectlocation = selectlocation.y + 120;
+                yselectlocation = selectlocation.y + 200;
             } else if (positionvalue == 2) {
                 yselectlocation = selectlocation.y;
                 xselectlocation = selectlocation.x - 200;
@@ -525,7 +527,7 @@ var myApp = angular.module('myApp', []).
 
                 model.addNodeData({
                     key: keynumber,
-                    loc: "175 160",
+                    loc: "175 200",
                     text: tostep + '\n' + 'Start conditions : \n' + answers,
                     stepname: tostep
                     //points:go.Point.stringify(selectlocation)
@@ -601,9 +603,9 @@ var myApp = angular.module('myApp', []).
 
                     if (!isfound) {     //create new node and link them
 
-                        xselectlocation = selectlocation.x;
-                        yselectlocation = selectlocation.y + 160;
-                        var newloc = xselectlocation + " " + yselectlocation;
+                        //xselectlocation = selectlocation.x;
+                        //yselectlocation = selectlocation.y + 160;
+                        //var newloc = xselectlocation + " " + yselectlocation;
 
                         diagram.startTransaction("Add new add link");
                         //alert('diagram.model.nodeDataArray.length:' +diagram.model.nodeDataArray.length);

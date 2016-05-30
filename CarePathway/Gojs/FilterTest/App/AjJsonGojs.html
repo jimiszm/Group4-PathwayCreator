@@ -181,42 +181,47 @@
 
 
 <!-- -------------------------------------------------------------- right part ----------------------------------------------------------------------------------->
-<div ng-controller="AjJsonGojscontroller"    style="float:left; height:630px; width: 52%; overflow: auto">
-<div id="myDiagramDiv" style=" width:auto;  height:630px; overflow: auto;margin: 2px; background-color:whitesmoke">
+<div ng-controller="AjJsonGojscontroller"    style=" float:left; height:630px; width: 52%; overflow: auto">
+<div id="myDiagramDiv" style=" width:auto;  height:594px; overflow: auto;margin: 2px; background-color:whitesmoke">
     <button onclick="getcommonDate()">get common date</button>
 </div>
-<div style="width : 90px; display: inline; ">
-    Conditions:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; position:<br>
-   <input type="text" ng-model="tag"> <select id="positons"><option value="1" selected>bottom</option><option value="2">left</option><option value="3">right</option></select><br>
-    Please input question1：<br>
-    <input type="text" ng-model="questiontext"><br>
-    Please input question2：<br>
-    <input type="text" ng-model="answertext">
+<div style="width:99.5%;  background-color: whitesmoke ; margin: 2px; height: 30px ">
+    <!--Conditions:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; position:<br>-->
+   <label>&nbsp;New Node position:</label>  <select id="positons" ><option value="1" selected>bottom</option><option value="2">left</option><option value="3">right</option></select>
+    <!--Please input question1：<br>-->
+    <!--<input type="text" ng-model="questiontext"><br>-->
+    <!--Please input question2：<br>-->
+    <!--<input type="text" ng-model="answertext">-->
     <!--<textarea id="answer" ng-model="answertext" ng-model-options=""/>-->
     <!--<input type="text" ng-model="">-->
     <!--<button ng-click="Generate()" type="button" class="btn btn-info btn-xs">Generate</button>-->
     <!--<button  ng-click="parseJson()">parseJson</button>-->
     <!--<button onclick="getmap()">getmap</button>-->
-    <button ng-click="newadd()">newaddnewaddnewadd</button><br>
-    <button ng-click="ajaddnode()">add</button><br>
-    <div style="display: inline">
-     Connect form Nodekey&nbsp;&nbsp; from port &nbsp;&nbsp;&nbsp;&nbsp;to Nodekey:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to port <br>
-    <input id="fromnode" type="text" disabled ng-model="fromnode">
-        <select id="fromport">
-            <option value="L">Left</option>
-            <option value="R">Right</option>
-            <option value="B">Bottom</option>
-            <option value="T">Top</option>
-        </select>
-        <input id="tonode" type="text" ng-model="tonode"> &nbsp;
-        <select id="toport">
-            <option value="L">Left</option>
-            <option value="R">Right</option>
-            <option value="B">Bottom</option>
-            <option value="T">Top</option>
-        </select>
-        <button ng-click="connect()">connect</button><br>
-        <button id= "LoadButton" ng-click="loadmap()">load</button><button id= "SaveButton" ng-click="savejson()">Save</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <label>&nbsp;Tag:</label>
+    <input type="text" ng-model="tag">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button class="button" ng-click="newadd()">add</button>
+    <!--<button ng-click="ajaddnode()">add</button><br>-->
+    <!--<div style="display: inline">-->
+     <!--Connect form Nodekey&nbsp;&nbsp; from port &nbsp;&nbsp;&nbsp;&nbsp;to Nodekey:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to port <br>-->
+    <!--<input id="fromnode" type="text" disabled ng-model="fromnode">-->
+        <!--<select id="fromport">-->
+            <!--<option value="L">Left</option>-->
+            <!--<option value="R">Right</option>-->
+            <!--<option value="B">Bottom</option>-->
+            <!--<option value="T">Top</option>-->
+        <!--</select>-->
+        <!--<input id="tonode" type="text" ng-model="tonode"> &nbsp;-->
+        <!--<select id="toport">-->
+            <!--<option value="L">Left</option>-->
+            <!--<option value="R">Right</option>-->
+            <!--<option value="B">Bottom</option>-->
+            <!--<option value="T">Top</option>-->
+        <!--</select>-->
+        <!--<button ng-click="connect()">connect</button><br>-->
+        <button  class="button" id= "LoadButton" ng-click="loadmap()">load</button>
+        <button class="button" id= "SaveButton" ng-click="savejson()">Save</button>
         <!--<input type="button" value="遍历文件夹" onclick="readFolder()">-->
         <!--<input type="button" value="写excel" onclick="writeExcel()">-->
     </div>
