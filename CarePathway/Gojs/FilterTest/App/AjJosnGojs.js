@@ -81,12 +81,12 @@ var initial = function () {
                 //mouseClick:  function (e, obj) { alert('111111111111');},
                 click: function (e, obj) {
                     selectkey = obj.part.data.key;
-                    document.getElementById("fromnode").value = selectkey;
-                    alert(obj.part.data.stepname);
+                    //document.getElementById("fromnode").value = selectkey;
+                    //alert(obj.part.data.stepname);
                     slectedStepname = obj.part.data.stepname;
                     selectlocation = obj.location.copy();
-                    alert(selectlocation);
-                },
+                    //alert(selectlocation);
+                   },
                 mouseEnter: function (e, obj) {
                     showPorts(obj.part, true);
                 },
@@ -455,9 +455,14 @@ var myApp = angular.module('myApp', []).
         $scope.newadd = function () {
 
 
+            var tag = document.getElementById('tag').value;
+            alert(tag);
             //var frompot = document.getElementById('fromport').value;
             //var topot = document.getElementById('toport').value;
-            //alert("selectlocation: "+ selectlocation.x +"   "+selectlocation.y);
+            alert("selectlocation: "+ selectlocation.x +"   "+selectlocation.y);
+
+            var frompot = "";
+            var topot = "";
             var positionvalue = document.getElementById('positons').value;
 
             if (positionvalue == 1) {
@@ -580,9 +585,9 @@ var myApp = angular.module('myApp', []).
                             model.addLinkData({
                                 from: selectkey,
                                 to: diagram.model.nodeDataArray[i].key,
-                                text: 'Link',
-                                fromPort: frompot,
-                                toPort: topot
+                                text: tag,
+                                fromPort: 'B',
+                                toPort: 'L'
                             });
                             diagram.commitTransaction("Add Link");
                             isfound = true;
@@ -632,7 +637,7 @@ var myApp = angular.module('myApp', []).
                         model.addLinkData({
                             from: selectkey,
                             to: keynumber - 1,
-                            text: 'Tags',
+                            text: tag,
                             fromPort: frompot,
                             toPort: topot
                         });
