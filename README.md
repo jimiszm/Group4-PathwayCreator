@@ -6,4 +6,8 @@ This directory contains two parts.
 
 ・CarePathway - The source of the project.
 
+  1.The applicaiton demo  is in   Group4-PathwayCreator/tree/master/CarePathway/Gojs/FilterTest/App.
+ 
+  2.Just open AjJsonGojs.html to inspect the demo.
+  
 ・Documents - The documentation of the project.
