@@ -2,8 +2,9 @@
  * Created by min on 19/05/2016.
  */
 
-commObj = '/Q:what is your name?/C:jimmy/Q:Waht is you age?/C：age<23/Step1';
-commObj1 = 'Step1/Q:what is your sex?/C:Male/Q:Waht is you weight?/C：74KG/Step2'
+//commObj = '/Q:what is your name?/C:jimmy/Q:Waht is you age?/C：age<23/Step1';
+//commObj1 = 'Step1/Q:what is your sex?/C:Male/Q:Waht is you weight?/C：74KG/Step2'
+commObj = '';
 
 slectedStepname = '';
 var selectkey = 0;
@@ -410,10 +411,10 @@ var myApp = angular.module('myApp', []).
         $scope.showAnswers = function (question, answer, co) {
             $scope.result = '';
             if (co == '1') {
-                x = question.name + answer.name;
+                x = '/' + question.name + '/' + answer.name;
             } else if (co == '2') {
-                z = question.name;
-                y += answer.name;
+                z = '/' + question.name + '/';
+                y += answer.name + ';';
             }
             $scope.selected = x + z + y;
         }
@@ -421,6 +422,13 @@ var myApp = angular.module('myApp', []).
 
         /*Submit start*/
         $scope.submit = function () {
+//        	for (i = 0; i < $scope.questions.length; i++ ) {
+//        		alert($scope.questions[i].name);
+//        		for (k = 0; k < $scope.questions[i].answers.length; k++) {
+//            		alert($scope.questions[i].answers[k].checked);
+//        		}
+//        	}
+            commObj = $scope.selected;
             $scope.result = $scope.selected;
             $scope.selected = '';
             y = '';
@@ -435,6 +443,12 @@ var myApp = angular.module('myApp', []).
                 $scope.error = 'Please input the tittle of next step.';
             } else {
                 $scope.error = 'No error.';
+                if ($scope.currentStep == undefined || $scope.currentStep == '') {
+                    commObj = commObj + '/' + $scope.nextStep;
+                } else {
+                    commObj = $scope.currentStep + commObj + '/' + $scope.nextStep;
+                }
+                alert('process ColdCheck { action Check {requires { symptoms } provides { testPlan }}}');
             }
         }
         /*Save check end*/
@@ -453,7 +467,6 @@ var myApp = angular.module('myApp', []).
          *  newadd for Form part
          ---------------------------------------------------------------------------- */
         $scope.newadd = function () {
-
 
             var tag = document.getElementById('tag').value;
             alert(tag);
