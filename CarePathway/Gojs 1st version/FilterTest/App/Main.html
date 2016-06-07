@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="lib/angular.js"></script>
+    <script src="Filtercontroller.js" type="text/javascript"></script>
+    <script src="lib/go-debug.js"></script>
+    <script src="lib/go.js"></script>
+    <script src="gojs.js"></script>
+    <style>
+        .cred{
+            color:gainsboro;
+        }
+    </style>
+</head>
+<body ng-app="injectionApp" ng-controller="injectcontroller" >
+<!--<div ng-controller="sexCongroller">-->
+    <!--<ul>-->
+    <!--<li  ng-repeat="user in user_info |age_filter ">-->
+    <!--{{user.id}}-->
+    <!--{{user.name}}-->
+    <!--{{user.age}}-->
+    <!--{{user.sex}}-->
+    <!--</li>-->
+    <!--</ul>-->
+<!--</div>-->
+
+<!--<ul>-->
+    <!--<li ng-repeat="item in objs">-->
+        <!--{{item.id}}-->
+        <!--{{item.name}}-->
+        <!--{{item.age}}-->
+    <!--</li>-->
+<!--</ul>-->
+<span ng-show="true" ng-init="i= 0">{{i}}</span>
+<ul ng-init="city" ng-switch="i" >
+    <h ng-switch-when="4">HHHHHHHHHHHHHHH</h>
+      <li ng-repeat="ct in city" >
+        <span>index : {{$index}}</span>
+        <span>first : {{$first}}</span>
+        <span>middle: {{$middle}}</span>
+        <span>last: {{$last}}</span>
+        <span>ct:{{ct}}</span>
+        <a href="#" ng-click="deleteitem($index,$event)">delete</a>
+    </li>
+    <div ng-bind="sss"></div>
+    <button ng-click="add(i)">change</button>
+</ul>
+<script>
+</script>
+<div id="myDiagramDiv" style="width:400px; height:150px; background-color: #DAE4E4;"></div>
+</body >
+</html>
