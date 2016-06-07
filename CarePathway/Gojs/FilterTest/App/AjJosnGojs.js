@@ -469,10 +469,10 @@ var myApp = angular.module('myApp', []).
         $scope.newadd = function () {
 
             var tag = document.getElementById('tag').value;
-            alert(tag);
+            //alert(tag);
             //var frompot = document.getElementById('fromport').value;
             //var topot = document.getElementById('toport').value;
-            alert("selectlocation: "+ selectlocation.x +"   "+selectlocation.y);
+            //alert("selectlocation: "+ selectlocation.x +"   "+selectlocation.y);
 
             var frompot = "";
             var topot = "";
@@ -496,14 +496,14 @@ var myApp = angular.module('myApp', []).
             }
             var newloc = xselectlocation+" " +yselectlocation ;
 
-            alert(newloc);
+            //alert(newloc);
 
             var diagram = myDiagram;
             var model = diagram.model;
 
 
             var titlespilt = commObj.split('/');
-            alert(titlespilt[0] + '---' + titlespilt[titlespilt.length - 1]);
+            //alert(titlespilt[0] + '---' + titlespilt[titlespilt.length - 1]);
 
             var fromstep = "";
             fromstep = titlespilt[0];
@@ -530,7 +530,7 @@ var myApp = angular.module('myApp', []).
 
             if (fromstep == "")         // it means create 1st node and 2ed node
             {
-                alert('it means create 1st node and 2ed node');
+                //alert('it means create 1st node and 2ed node');
                 diagram.startTransaction("Add State");
 
                 model.addNodeData({
